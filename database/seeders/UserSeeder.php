@@ -18,12 +18,12 @@ class UserSeeder extends Seeder
         $data = [
             [
                 'username' => 'admin',
-                'lname' => 'Villafuerte',
-                'fname' => 'Archielin',
-                'mname' => 'P',
+                'lname' => 'Pradia',
+                'fname' => 'Gerliza',
+                'mname' => '',
                 'sex' => 'FEMALE',
-                'email' => 'archielin@light.com',
-                'contact_no' => '09164578599',
+                'email' => 'liz@light.com',
+                'contact_no' => '1234567',
                 'role' => 'ADMINISTRATOR',
                 'group_role_id' => 1,
                 'password' => Hash::make('a')
@@ -31,31 +31,17 @@ class UserSeeder extends Seeder
 
 
             [
-                'username' => 'prelyn',
-                'lname' => 'Suco',
-                'fname' => 'Prelyn ',
-                'mname' => 'P',
+                'username' => 'liz',
+                'lname' => 'Pradia',
+                'fname' => 'Gerliza ',
+                'mname' => '',
                 'sex' => 'FEMALE',
-                'email' => 'prelyn@light.com',
-                'contact_no' => '09164578591',
+                'email' => 'liz01@light.com',
+                'contact_no' => '12312342234123',
                 'role' => 'ADMINISTRATOR',
                 'group_role_id' => 2,
                 'password' => Hash::make('a')
             ],
-
-            [
-                'username' => 'jean',
-                'lname' => 'Superales',
-                'fname' => 'Jean  ',
-                'mname' => 'C',
-                'sex' => 'FEMALE',
-                'email' => 'jean@light.com',
-                'contact_no' => '09164578592',
-                'role' => 'STAFF',
-                'group_role_id' => 2,
-                'password' => Hash::make('a')
-            ],
-            
         ];
 
         \App\Models\User::insertOrIgnore($data);
