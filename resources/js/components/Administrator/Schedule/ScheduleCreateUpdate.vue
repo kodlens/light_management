@@ -23,12 +23,12 @@
                                 </b-field>
 
                                 <b-field label="Please select an option" label-position="on-border">
-                                        <b-select v-model="fields.optionday">
+                                        <b-select v-model="fields.action_type">
                                             <option :value="0">SPECIFIC DATE</option>
                                             <option :value="1">CUSTOM DAYS</option>
                                         </b-select>
                                 </b-field>
-                                <div v-if="fields.optionday == 0">
+                                <div v-if="fields.action_type == 0">
                                     <b-field label="Select Date Time" grouped  expanded class="is-centered" label-position="on-border"
                                             :type="this.errors.date_time ? 'is-danger':''"
                                             :message="this.errors.date_time ? this.errors.date_time[0] : ''">
@@ -57,7 +57,7 @@
                                         <option value="SPECIFIC">SPECIFIC</option>
                                     </b-select>
                                 </b-field> -->
-                                <div v-if="fields.optionday == 1">
+                                <div v-if="fields.action_type == 1">
                                     <hr>
 
                                     <b-field label="Schedule On" grouped  expanded class="is-centered" label-position="on-border"
@@ -131,12 +131,13 @@ export default {
 
 
             fields: {
-                optionday: 0,
+                action_type: 0,
                 schedule_name: null,
                 schedule_on: null,
                 schedule_off: null,
                 date_from: null,
                 date_to: null,
+                date_time: new Date(),
                 mon: false,
                 tue: false,
                 wed: false,
@@ -167,9 +168,13 @@ export default {
         
         clearFields(){
             this.fields = {
+                action_type: 0,
                 schedule_name: null,
+                schedule_on: null,
+                schedule_off: null,
                 date_from: null,
                 date_to: null,
+                date_time: new Date(),
                 mon: false,
                 tue: false,
                 wed: false,
@@ -178,6 +183,7 @@ export default {
                 sat: false,
                 sun: false,
             };
+            
             this.errors = {};
         },
 
@@ -214,8 +220,10 @@ export default {
                 this.fields.date_time = new Date(res.data.date_time);
                 this.fields.device = res.data.device_id;
                 this.fields.schedule_name = res.data.schedule_name;
-                //this.fields.system_action = res.data.system_action;
-                //this.fields.action_type = res.data.action_type;
+
+                this.fields.action_type = res.data.action_type;
+                this.fields.date_time = new Date(res.data.date_time);
+                this.fields.system_action = res.data.system_action;
 
                 this.fields.schedule_on = new Date(new Date().toLocaleDateString() + " " + res.data.schedule_on);
                 this.fields.schedule_off = new Date(new Date().toLocaleDateString() + " " + res.data.schedule_off);

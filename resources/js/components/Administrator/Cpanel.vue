@@ -82,7 +82,9 @@ export default {
 				status.className = 'offline';
 			}
 
-			fetch(`http://${data.device_ip}/${token}`);
+			fetch(`http://${data.device_ip}/${token}`).then(res=>{
+				console.log(res)
+			});
 			//axios.get('/test-switch')
 			
 		},

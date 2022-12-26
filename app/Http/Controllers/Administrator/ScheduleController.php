@@ -52,7 +52,7 @@ class ScheduleController extends Controller
     public function store(Request $req){
         //return $req;
 
-        if($req->optionday == 0){
+        if($req->action_type == 0){
             $req->validate([
                 'device' => ['required'],
                 'schedule_name' => ['required'],
@@ -74,7 +74,7 @@ class ScheduleController extends Controller
             ]);
         }
         
-        if($req->optionday == 0){
+        if($req->action_type == 0){
             $dateTime =  $req->date_time;
             $nDateTime = date("Y-m-d H:i:s", strtotime($dateTime)); //convert to date format UNIX
         }else{
@@ -87,11 +87,11 @@ class ScheduleController extends Controller
         $data = Schedule::create([
             'device_id' => $req->device,
             'schedule_name' => strtoupper($req->schedule_name),
-            'date_time' => $req->optionday == 0 ? $nDateTime : null,
-            'system_action' => $req->optionday == 0 ? $req->system_action : null,
-            // 'action_type' => $req->action_type,
-            'schedule_on' => $req->optionday == 1 ? $scheduleOn : null,
-            'schedule_off' => $req->optionday == 1 ? $scheduleOff : null,
+            'date_time' => $req->action_type == 0 ? $nDateTime : null,
+            'system_action' => $req->action_type == 0 ? $req->system_action : null,
+            'action_type' => $req->action_type,
+            'schedule_on' => $req->action_type == 1 ? $scheduleOn : null,
+            'schedule_off' => $req->action_type == 1 ? $scheduleOff : null,
             'mon' => $req->mon,
             'tue' => $req->tue,
             'wed' => $req->wed,
@@ -120,7 +120,7 @@ class ScheduleController extends Controller
     }
     public function update(Request $req, $id){
 
-        if($req->optionday == 0){
+        if($req->action_type == 0){
             $req->validate([
                 'device' => ['required'],
                 'schedule_name' => ['required'],
@@ -142,7 +142,7 @@ class ScheduleController extends Controller
             ]);
         }
 
-        if($req->optionday == 0){
+        if($req->action_type == 0){
             $dateTime =  $req->date_time;
             $nDateTime = date("Y-m-d H:i:s", strtotime($dateTime)); //convert to date format UNIX
         }else{
@@ -154,11 +154,11 @@ class ScheduleController extends Controller
         $data = Schedule::find($id);
         $data->device_id  = $req->device;
         $data->schedule_name  = $req->schedule_name;
-        $data->date_time = $req->optionday == 0 ? $nDateTime : null;
-        $data->system_action = $req->optionday == 0 ? $req->system_action : null;
+        $data->date_time = $req->action_type == 0 ? $nDateTime : null;
+        $data->system_action = $req->action_type == 0 ? $req->system_action : null;
         // $data->action_type = $req->action_type;
-        $data->schedule_on = $req->optionday == 1 ? $scheduleOn : null;
-        $data->schedule_off = $req->optionday == 1 ? $scheduleOff : null;
+        $data->schedule_on = $req->action_type == 1 ? $scheduleOn : null;
+        $data->schedule_off = $req->action_type == 1 ? $scheduleOff : null;
 
         $data->mon = $req->mon;
         $data->tue = $req->tue;

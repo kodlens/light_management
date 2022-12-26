@@ -195,23 +195,28 @@ Route::get('/s', function(){
 
 });
 
-Route::get('/test', function(){
+Route::get('/now-sched', function(){
     
     $sched = DB::table('schedules as a')
                 ->join('devices as b', 'a.device_id', 'b.device_id')
                 ->where('date_time', date("Y-m-d H:i"))
                 ->get();
 
+    //return $sched;
+
     foreach($sched as $i){
+       
         if($i->system_action == 'ON'){
-            Http::withHeaders([
-                'Content-Type' => 'text/plain'
-            ])->get('http://'.$i->device_ip . '/' . $i->device_token_on, []);
+            $url = 'http://'. $i->device_ip . '/' . $i->device_token_on;
         }else{
-            Http::withHeaders([
-                'Content-Type' => 'text/plain'
-            ])->get('http://'.$i->device_ip . '/' . $i->device_token_off, []); 
+            $url = 'http://'. $i->device_ip . '/' . $i->device_token_off;
         }
+        return $url;
+
+
+        Http::withHeaders([
+            'Content-Type' => 'text/plain'
+        ])->get($url, []);
     }
 
 });
