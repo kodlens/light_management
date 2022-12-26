@@ -73,7 +73,14 @@ export default {
             axios.get('/get-user').then(res=>{
                 this.user = res.data;
             })
+        },
+            
+            
+        naunsanamanNi(){
+            
         }
+        
+        
     },
 
     mounted() {

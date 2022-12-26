@@ -74,10 +74,12 @@ export default {
 				token = data.device_token_on;
 				status.innerHTML = 'ONLINE';
 				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=ON')
+				status.className = 'online';
 			}else{
 				token = data.device_token_off;
 				axios.get('/switch-log?url=' + data.device_ip + '&token=' + token + '&status=OFF')
 				status.innerHTML = 'OFFLINE';
+				status.className = 'offline';
 			}
 
 			fetch(`http://${data.device_ip}/${token}`);
@@ -131,9 +133,9 @@ export default {
 
 	mounted(){
 		
-		window.setInterval(() => {
-			this.getNotifications()
-		}, 15000);
+		// window.setInterval(() => {
+		// 	this.getNotifications()
+		// }, 15000);
 
 
 
