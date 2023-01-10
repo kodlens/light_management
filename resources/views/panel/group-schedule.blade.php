@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <dentist></dentist>
+    <group-schedule></group-schedule>
 @endsection
 

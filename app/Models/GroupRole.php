@@ -15,4 +15,9 @@ class GroupRole extends Model
 
     protected $fillable = ['group_role_name'];
 
+
+    public function device_accesses(){
+        return $this->hasMany(DeviceAAccess::class, 'group_role_id', 'group_role_id')
+            ->with(['device']);
+    }
 }

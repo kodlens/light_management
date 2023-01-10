@@ -94,9 +94,6 @@ export default {
 				this.buildings = res.data;
 			})
 
-
-			
-
 		},
 
 		getNotifications(){
@@ -129,12 +126,12 @@ export default {
 	},
 
 	created(){
-		this.initData();
+		
 
 	},
 
 	mounted(){
-		
+		this.initData();
 		// window.setInterval(() => {
 		// 	this.getNotifications()
 		// }, 15000);

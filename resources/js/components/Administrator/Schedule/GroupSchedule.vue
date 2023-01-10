@@ -1,12 +1,12 @@
 <template>
     <div>
         <div class="section">
-
             <div class="columns is-centered">
-                <div class="column is-10">
+                <div class="column is-10-desktop is-10-tablet">
                     <div class="box">
-                        <div class="is-flex is-justify-content-center mb-2" style="font-size: 20px; font-weight: bold;">LIST OF SCHEDULE</div>
-                            
+
+                        <div class="is-flex is-justify-content-center mb-2" style="font-size: 20px; font-weight: bold;">LIST OF GROUP SCHEDULES</div>
+
                         <div class="level">
                             <div class="level-left">
                                 <b-field label="Page">
@@ -19,7 +19,6 @@
                                     <b-select v-model="sortOrder" @input="loadAsyncData">
                                         <option value="asc">ASC</option>
                                         <option value="desc">DESC</option>
-
                                     </b-select>
                                 </b-field>
                             </div>
@@ -28,23 +27,23 @@
                                 <div class="level-item">
                                     <b-field label="Search">
                                         <b-input type="text"
-                                                    v-model="search.app_date" placeholder="Search Appointment"
-                                                    @keyup.native.enter="loadAsyncData"/>
+                                                 v-model="search.app_date" placeholder="Search"
+                                                 @keyup.native.enter="loadAsyncData"/>
                                         <p class="control">
-                                                <b-tooltip label="Search" type="is-success">
-                                            <b-button type="is-primary" icon-right="account-filter" @click="loadAsyncData"/>
-                                                </b-tooltip>
+                                            <b-tooltip label="Search" type="is-success">
+                                                <b-button type="is-primary" icon-right="account-filter" @click="loadAsyncData"/>
+                                            </b-tooltip>
                                         </p>
                                     </b-field>
                                 </div>
                             </div>
                         </div>
 
-
                         <b-table
                             :data="data"
                             :loading="loading"
                             paginated
+                            detailed
                             backend-pagination
                             :total="total"
                             :per-page="perPage"
@@ -57,12 +56,8 @@
                             :default-sort-direction="defaultSortDirection"
                             @sort="onSort">
 
-                            <b-table-column field="schedule_id" label="ID" v-slot="props">
-                                {{ props.row.schedule_id }}
-                            </b-table-column>
-
-                            <b-table-column field="device_name" label="Device Name" v-slot="props">
-                                {{ props.row.device.device_name }}
+                            <b-table-column field="group_schedule_id" label="ID" v-slot="props">
+                                {{ props.row.group_schedule_id }}
                             </b-table-column>
 
                             <b-table-column field="schedule_name" label="Schedule Name" v-slot="props">
@@ -94,37 +89,57 @@
                             <b-table-column label="Action" v-slot="props">
                                 <div class="is-flex">
                                     <b-tooltip label="Edit" type="is-warning">
-                                        <b-button class="button is-small is-warning mr-1" icon-right="pencil" tag="a" :href="`/schedules/${props.row.schedule_id}/edit`"></b-button>
+                                        <b-button class="button is-small is-warning mr-1" icon-right="pencil" tag="a" :href="`/group-schedules/${props.row.group_schedule_id}/edit`"></b-button>
                                     </b-tooltip>
 
                                     <b-tooltip label="Delete" type="is-danger">
-                                        <b-button class="button is-small is-danger mr-1" icon-right="delete" @click="confirmDelete(props.row.schedule_id)"></b-button>
+                                        <b-button class="button is-small is-danger mr-1" icon-right="delete" @click="confirmDelete(props.row.group_schedule_id)"></b-button>
                                     </b-tooltip>
                                 </div>
                             </b-table-column>
+
+
+                            <template slot="detail" slot-scope="props">
+                                <th>
+                                    Device
+                                </th>
+                                <th>
+                                    IP Address
+                                </th>
+
+                                <tr v-for="(item, index) in props.row.group_schedule_devices" :key="index">
+                                    <td>{{ item.device.device_name }}</td>
+                                    <td>{{ item.device.device_ip }}</td>
+
+                                </tr>
+                            </template>
+
+
                         </b-table>
 
                         <div class="buttons mt-3">
-                            <b-button tag="a" href="/schedules/create" icon-right="account-arrow-up-outline" class="is-success">NEW</b-button>
+                            <b-button tag="a" href="/group-schedules/create" icon-right="account-arrow-up-outline" class="is-success">NEW</b-button>
                         </div>
 
-                     
-                    </div>
-                </div>
-            </div>
+                    </div><!--box -->
+                </div><!--col-->
+            </div><!--cols-->
+
+
         </div><!--section div-->
     </div> <!--root div-->
+
 </template>
 
 <script>
 export default {
 
-    data(){
+     data(){
         return{
             data: [],
             total: 0,
             loading: false,
-            sortField: 'schedule_id',
+            sortField: 'group_schedule_id',
             sortOrder: 'desc',
             page: 1,
             perPage: 5,
@@ -150,7 +165,6 @@ export default {
                 'button': true,
                 'is-loading':false,
             },
-
         }
     },
 
@@ -167,7 +181,7 @@ export default {
             ].join('&')
 
             this.loading = true
-            axios.get(`/get-schedules?${params}`)
+            axios.get(`/get-group-schedules?${params}`)
                 .then(({ data }) => {
                     this.data = [];
                     let currentTotal = data.total
@@ -181,6 +195,7 @@ export default {
                         this.data.push(item)
                     })
                     this.loading = false
+                    console.log(this.data)
                 })
                 .catch((error) => {
                     this.data = []
@@ -231,7 +246,7 @@ export default {
         },
         //execute delete after confirming
         deleteSubmit(delete_id) {
-            axios.delete('/schedules/' + delete_id).then(res => {
+            axios.delete('/group-schedules/' + delete_id).then(res => {
                 this.loadAsyncData();
             }).catch(err => {
                 if (err.response.status === 422) {
@@ -248,23 +263,14 @@ export default {
 
 
             //nested axios for getting the address 1 by 1 or request by request
-            axios.get('/schedules/' + data_id).then(res=>{
+            axios.get('/group-schedules/' + data_id).then(res=>{
                 // this.fields.training_center = res.data.training_center_id;
                 // let dateNTime = res.data.app_date + ' ' + res.data.app_time;
                 // this.fields.appointment_date = new Date(dateNTime);
                 // this.fields.remarks = res.data.remarks;
-                
-
             });
         },
 
- 
-
-        loadTrainingCenter(){
-            axios.get('/get-open-training-centers').then(res=>{
-                this.trainingCenters = res.data;
-            })
-        },
 
     },
 
@@ -289,5 +295,5 @@ export default {
         font-weight: bold;
         color: #1a73bd;
     }
-    
+
 </style>

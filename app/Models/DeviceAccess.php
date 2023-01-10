@@ -28,6 +28,4 @@ class DeviceAccess extends Model
         return $this->belongsTo(GroupRole::class, 'group_role_id', 'group_role_id');
     }
 
-    
-
 }

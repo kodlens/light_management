@@ -108,6 +108,12 @@ Route::get('/load-access-role-if-any/{id}', [App\Http\Controllers\Administrator\
 
 
 
+//Group Role Schedule
+Route::resource('/group-schedules', App\Http\Controllers\Administrator\GroupScheduleController::class);
+Route::get('/get-group-schedules', [App\Http\Controllers\Administrator\GroupScheduleController::class, 'groupSchedules']);
+Route::post('/group-schedule-remove-device/{id}', [App\Http\Controllers\Administrator\GroupScheduleController::class, 'deleteGroupScheduleDevice']);
+
+
 //Schedule
 Route::resource('/schedules', App\Http\Controllers\Administrator\ScheduleController::class);
 Route::get('/get-schedules', [App\Http\Controllers\Administrator\ScheduleController::class, 'getSchedules']);
@@ -148,11 +154,18 @@ Route::get('/load-open-rooms', function(){
 Route::get('/load-open-devices', function(){
     return Device::with('room')->orderBy('device_name', 'asc')->get();
 });
+
+Route::get('/load-open-group-roles', function(){
+    return GroupRole::with(['device_accesses'])->orderBy('device_name', 'asc')->get();
+});
+
+
 Route::get('/load-open-group-roles', function(){
     return GroupRole::orderBy('group_role_name', 'asc')
         ->select('group_role_id', 'group_role_name')
         ->get();
 });
+
 
 
 
@@ -173,12 +186,12 @@ Route::get('/applogout', function(Request $req){
 
 Route::get('/s', function(){
     $day = date('D');
-    
+
     $sched = DB::table('schedules as a')
         ->join('devices as b', 'a.device_id', 'b.device_id')
         ->where($day, 1)
         ->get();
-    
+
     return $sched;
 
     $time = date('H:i') . ':00';
@@ -187,7 +200,7 @@ Route::get('/s', function(){
         if($time === $i->schedule_on){
             return 'turn on';
         }
-    
+
         if($time === $i->schedule_off){
             return 'turn off';
         }
@@ -196,7 +209,7 @@ Route::get('/s', function(){
 });
 
 Route::get('/now-sched', function(){
-    
+
     $sched = DB::table('schedules as a')
                 ->join('devices as b', 'a.device_id', 'b.device_id')
                 ->where('date_time', date("Y-m-d H:i"))
@@ -205,7 +218,7 @@ Route::get('/now-sched', function(){
     //return $sched;
 
     foreach($sched as $i){
-       
+
         if($i->system_action == 'ON'){
             $url = 'http://'. $i->device_ip . '/' . $i->device_token_on;
         }else{

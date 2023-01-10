@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        
+
         $schedule->call(function () {
             $day = date('D');
 
@@ -45,33 +45,10 @@ class Kernel extends ConsoleKernel
                 }else{
                     Http::withHeaders([
                         'Content-Type' => 'text/plain'
-                    ])->get('http://'.$i->device_ip . '/' . $i->device_token_off, []); 
+                    ])->get('http://'.$i->device_ip . '/' . $i->device_token_off, []);
                 }
             }
 
-                // if(date('Y-m-d H:i') == date('Y-m-d H:i', strtotime($i->date_time))){
-                //     //SPECIFIC DATE AND TIME SCHEDULE
-                    
-                // }
-                
-                // if($i->action_type == 'SPECIFIC'){
-
-                    
-                // }
-                // else{
-                //     //ELSE IF SET TO REPEAT (DAILY)
-                //     //check if ON action or OFF action
-                //     if($i->system_action == 'ON'){
-                //         Http::withHeaders([
-                //             'Content-Type' => 'text/plain'
-                //         ])->get('http://'.$i->device_ip . '/' . $i->device_token_on, []);
-                //     }else{
-                //         Http::withHeaders([
-                //             'Content-Type' => 'text/plain'
-                //         ])->get('http://'.$i->device_ip . '/' . $i->device_token_off, []);  
-                //     }
-                // }
-            //}//foreach
 
 
             $sched = DB::table('schedules as a')
@@ -80,7 +57,7 @@ class Kernel extends ConsoleKernel
                 ->get();
 
             $time = date('H:i') . ':00';
-            
+
             foreach($sched as $i){
                 if($time === $i->schedule_on){
                     Http::withHeaders([
@@ -88,13 +65,61 @@ class Kernel extends ConsoleKernel
                     ])->get('http://'.$i->device_ip . '/' . $i->device_token_on, []);
                     return 'turn on';
                 }
-            
+
                 if($time === $i->schedule_off){
                     Http::withHeaders([
                         'Content-Type' => 'text/plain'
                     ])->get('http://'.$i->device_ip . '/' . $i->device_token_off, []);
                 }
             }
+
+
+
+            //group schedule
+            $sched = DB::table('group_scheduls as a')
+                ->join('gruop_schedule_devices as b', 'a.group_schedule_id', 'b.group_schedule_id')
+                ->join('devices as c', 'b.device_id', 'c.device_id')
+                ->where('date_time', date("Y-m-d H:i"))
+                ->get();
+
+            foreach($sched as $i){
+                if($i->system_action == 'ON'){
+                    Http::withHeaders([
+                        'Content-Type' => 'text/plain'
+                    ])->get('http://'.$i->device_ip . '/' . $i->device_token_on, []);
+                }else{
+                    Http::withHeaders([
+                        'Content-Type' => 'text/plain'
+                    ])->get('http://'.$i->device_ip . '/' . $i->device_token_off, []);
+                }
+            }
+
+
+
+
+            $sched = DB::table('group_scheduls as a')
+                ->join('gruop_schedule_devices as b', 'a.group_schedule_id', 'b.group_schedule_id')
+                ->join('devices as c', 'b.device_id', 'c.device_id')
+                ->where($day, 1)
+                ->get();
+
+            $time = date('H:i') . ':00';
+
+            foreach($sched as $i){
+                if($time === $i->schedule_on){
+                    Http::withHeaders([
+                        'Content-Type' => 'text/plain'
+                    ])->get('http://'.$i->device_ip . '/' . $i->device_token_on, []);
+                    return 'turn on';
+                }
+
+                if($time === $i->schedule_off){
+                    Http::withHeaders([
+                        'Content-Type' => 'text/plain'
+                    ])->get('http://'.$i->device_ip . '/' . $i->device_token_off, []);
+                }
+            }
+
 
         })->everyMinute(); //loop everyminute
     }

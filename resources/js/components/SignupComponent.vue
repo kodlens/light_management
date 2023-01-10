@@ -13,9 +13,12 @@
                             <div class="columns">
                                 <div class="column">
                                     <b-field label="Username"
-                                             :type="this.errors.username ? 'is-danger':''"
-                                             :message="this.errors.username ? this.errors.username[0] : ''">
-                                        <b-input type="text" v-model="fields.username" icon="account"></b-input>
+                                         :type="this.errors.username ? 'is-danger':''"
+                                         :message="this.errors.username ? this.errors.username[0] : ''">
+                                        <b-input
+                                            type="text"
+                                            v-model="fields.username"
+                                            icon="account"></b-input>
                                     </b-field>
                                 </div>
                             </div>

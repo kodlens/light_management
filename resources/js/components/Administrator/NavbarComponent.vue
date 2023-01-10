@@ -29,7 +29,7 @@
                             <b-menu-item v-if="user.role === 'ADMINISTRATOR'" label="Floor" icon="floor-plan" tag="a" href="/floors"></b-menu-item>
 
                             <b-menu-item v-if="user.role === 'ADMINISTRATOR'" label="Room" icon="google-classroom" tag="a" href="/rooms"></b-menu-item>
-                            
+
                             <b-menu-item v-if="user.role === 'ADMINISTRATOR'" label="Group Role" icon="account-group" tag="a" href="/group-roles"></b-menu-item>
 
 
@@ -39,9 +39,10 @@
                             <!-- <b-menu-item v-if="user.role === 'ADMINISTRATOR'" label="Device Accesses" icon="shield-lock" tag="a" href="/device-accesses"></b-menu-item> -->
 
                             <b-menu-item label="Schedule" icon="domain" tag="a" href="/schedules"></b-menu-item>
-                            
+                            <b-menu-item label="Group Schedule" icon="domain" tag="a" href="/group-schedules"></b-menu-item>
+
                             <b-menu-item label="User" icon="account" tag="a" v-if="user.role === 'ADMINISTRATOR'" href="/users"></b-menu-item>
-                            
+
                         </b-menu-list>
 
                         <b-menu-list label="Actions">

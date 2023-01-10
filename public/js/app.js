@@ -8513,10 +8513,9 @@ __webpack_require__.r(__webpack_exports__);
       });
     }
   },
-  created: function created() {
-    this.initData();
-  },
-  mounted: function mounted() {// window.setInterval(() => {
+  created: function created() {},
+  mounted: function mounted() {
+    this.initData(); // window.setInterval(() => {
     // 	this.getNotifications()
     // }, 15000);
     //this.test();
@@ -10331,6 +10330,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -11299,6 +11299,625 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  data: function data() {
+    return {
+      data: [],
+      total: 0,
+      loading: false,
+      sortField: 'group_schedule_id',
+      sortOrder: 'desc',
+      page: 1,
+      perPage: 5,
+      defaultSortDirection: 'asc',
+      locale: undefined,
+      // Browser locale
+      global_id: 0,
+      search: {
+        from_date: '',
+        to_date: ''
+      },
+      isModalCreate: false,
+      fields: {},
+      errors: {},
+      btnClass: {
+        'is-success': true,
+        'button': true,
+        'is-loading': false
+      }
+    };
+  },
+  methods: {
+    /*
+    * Load async data
+    */
+    loadAsyncData: function loadAsyncData() {
+      var _this = this;
+
+      var params = ["sort_by=".concat(this.sortField, ".").concat(this.sortOrder), "type=".concat(this.search.appointment_type), "perpage=".concat(this.perPage), "page=".concat(this.page)].join('&');
+      this.loading = true;
+      axios.get("/get-group-schedules?".concat(params)).then(function (_ref) {
+        var data = _ref.data;
+        _this.data = [];
+        var currentTotal = data.total;
+
+        if (data.total / _this.perPage > 1000) {
+          currentTotal = _this.perPage * 1000;
+        }
+
+        _this.total = currentTotal;
+        data.data.forEach(function (item) {
+          //item.release_date = item.release_date ? item.release_date.replace(/-/g, '/') : null
+          _this.data.push(item);
+        });
+        _this.loading = false;
+        console.log(_this.data);
+      })["catch"](function (error) {
+        _this.data = [];
+        _this.total = 0;
+        _this.loading = false;
+        throw error;
+      });
+    },
+
+    /*
+    * Handle page-change event
+    */
+    onPageChange: function onPageChange(page) {
+      this.page = page;
+      this.loadAsyncData();
+    },
+    onSort: function onSort(field, order) {
+      this.sortField = field;
+      this.sortOrder = order;
+      this.loadAsyncData();
+    },
+    setPerPage: function setPerPage() {
+      this.loadAsyncData();
+    },
+    clearFields: function clearFields() {
+      this.fields = {
+        appointment_date: null,
+        nAppointmentDate: '',
+        appointment_type: ''
+      };
+      this.errors = {};
+    },
+    //alert box ask for deletion
+    confirmDelete: function confirmDelete(delete_id) {
+      var _this2 = this;
+
+      this.$buefy.dialog.confirm({
+        title: 'DELETE!',
+        type: 'is-danger',
+        message: 'Are you sure you want to delete this data?',
+        cancelText: 'Cancel',
+        confirmText: 'Delete',
+        onConfirm: function onConfirm() {
+          return _this2.deleteSubmit(delete_id);
+        }
+      });
+    },
+    //execute delete after confirming
+    deleteSubmit: function deleteSubmit(delete_id) {
+      var _this3 = this;
+
+      axios["delete"]('/group-schedules/' + delete_id).then(function (res) {
+        _this3.loadAsyncData();
+      })["catch"](function (err) {
+        if (err.response.status === 422) {
+          _this3.errors = err.response.data.errors;
+        }
+      });
+    },
+    //update code here
+    getData: function getData(data_id) {
+      this.clearFields();
+      this.global_id = data_id;
+      this.isModalCreate = true; //nested axios for getting the address 1 by 1 or request by request
+
+      axios.get('/group-schedules/' + data_id).then(function (res) {// this.fields.training_center = res.data.training_center_id;
+        // let dateNTime = res.data.app_date + ' ' + res.data.app_time;
+        // this.fields.appointment_date = new Date(dateNTime);
+        // this.fields.remarks = res.data.remarks;
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.loadAsyncData();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['propId', 'propData'],
+  data: function data() {
+    return {
+      locale: undefined,
+      // Browser locale
+      global_id: 0,
+      search: {
+        from_date: '',
+        to_date: ''
+      },
+      isModalCreate: false,
+      filteredDevices: [],
+      fields: {
+        action_type: 0,
+        devices: [],
+        schedule_name: null,
+        schedule_on: null,
+        schedule_off: null,
+        date_from: null,
+        date_to: null,
+        date_time: new Date(),
+        mon: false,
+        tue: false,
+        wed: false,
+        thu: false,
+        fri: false,
+        sat: false,
+        sun: false
+      },
+      errors: {},
+      btnClass: {
+        'is-info': true,
+        'button': true,
+        'is-loading': false
+      },
+      devices: [],
+      data: []
+    };
+  },
+  methods: {
+    loadDevices: function loadDevices() {
+      var _this = this;
+
+      axios.get('/load-open-devices').then(function (res) {
+        _this.devices = res.data;
+      });
+    },
+    getFilteredTags: function getFilteredTags(text) {
+      this.filteredDevices = this.devices.filter(function (option) {
+        return option.device_name.toString().toLowerCase().indexOf(text.toLowerCase()) >= 0;
+      });
+    },
+    clearFields: function clearFields() {
+      this.fields = {
+        action_type: 0,
+        devices: [],
+        schedule_name: null,
+        schedule_on: null,
+        schedule_off: null,
+        date_from: null,
+        date_to: null,
+        date_time: new Date(),
+        mon: false,
+        tue: false,
+        wed: false,
+        thu: false,
+        fri: false,
+        sat: false,
+        sun: false
+      };
+      this.errors = {};
+    },
+    //alert box ask for deletion
+    confirmDelete: function confirmDelete(delete_id) {
+      var _this2 = this;
+
+      this.$buefy.dialog.confirm({
+        title: 'DELETE!',
+        type: 'is-danger',
+        message: 'Are you sure you want to delete this data?',
+        cancelText: 'Cancel',
+        confirmText: 'Delete',
+        onConfirm: function onConfirm() {
+          return _this2.deleteSubmit(delete_id);
+        }
+      });
+    },
+    //execute delete after confirming
+    deleteSubmit: function deleteSubmit(delete_id) {
+      var _this3 = this;
+
+      axios["delete"]('/schedules/' + delete_id).then(function (res) {
+        _this3.loadAsyncData();
+      })["catch"](function (err) {
+        if (err.response.status === 422) {
+          _this3.errors = err.response.data.errors;
+        }
+      });
+    },
+    //update code here
+    setData: function setData() {
+      this.clearFields(); //nested axios for getting the address 1 by 1 or request by request
+
+      var nDevices = [];
+      this.data.group_schedule_devices.forEach(function (item) {
+        nDevices.push({
+          group_schedule_id: item.group_schedule_id,
+          group_schedule_device_id: item.group_schedule_device_id,
+          device_id: item.device_id,
+          device_name: item.device.device_name
+        });
+      });
+      console.log(this.data);
+      this.fields.date_time = new Date(this.data.date_time);
+      this.fields.devices = nDevices;
+      this.fields.schedule_name = this.data.schedule_name;
+      this.fields.action_type = this.data.action_type;
+      this.fields.date_time = new Date(this.data.date_time);
+      this.fields.system_action = this.data.system_action;
+      this.fields.schedule_on = new Date(new Date().toLocaleDateString() + " " + this.data.schedule_on);
+      this.fields.schedule_off = new Date(new Date().toLocaleDateString() + " " + this.data.schedule_off);
+      this.fields.mon = this.data.mon === 1 ? true : false;
+      this.fields.tue = this.data.tue === 1 ? true : false;
+      this.fields.wed = this.data.wed === 1 ? true : false;
+      this.fields.thu = this.data.thu === 1 ? true : false;
+      this.fields.fri = this.data.fri === 1 ? true : false;
+      this.fields.sat = this.data.sat === 1 ? true : false;
+      this.fields.sun = this.data.sun === 1 ? true : false;
+    },
+    submit: function submit() {
+      var _this4 = this;
+
+      //this.fields.app_date = new Date(this.fields.appointment_date).toLocaleDateString();
+      //this.fields.app_time = new Date(this.fields.appointment_date).toLocaleTimeString();
+      if (this.global_id > 0) {
+        //UPDATE
+        axios.put('/group-schedules/' + this.global_id, this.fields).then(function (res) {
+          if (res.data.status === 'updated') {
+            _this4.$buefy.dialog.alert({
+              title: 'UPDATED!',
+              message: 'Successfully updated.',
+              type: 'is-success',
+              onConfirm: function onConfirm() {
+                window.location = '/group-schedules';
+              }
+            });
+          }
+        })["catch"](function (err) {
+          if (err.response.status === 422) {
+            _this4.errors = err.response.data.errors;
+          }
+        });
+      } else {
+        //INSERT HERE
+        axios.post('/group-schedules', this.fields).then(function (res) {
+          if (res.data.status === 'saved') {
+            _this4.$buefy.dialog.alert({
+              title: 'SAVED!',
+              message: 'Successfully saved.',
+              type: 'is-success',
+              confirmText: 'OK',
+              onConfirm: function onConfirm() {
+                window.location = '/group-schedules';
+              }
+            });
+          }
+        })["catch"](function (err) {
+          if (err.response.status === 422) {
+            _this4.errors = err.response.data.errors;
+          }
+        });
+      }
+    },
+    removeDevice: function removeDevice(data) {
+      var _this5 = this;
+
+      console.log(data);
+      axios.post('/group-schedule-remove-device/' + data.group_schedule_device_id).then(function () {
+        _this5.$buefy.toast.open({
+          message: 'Successfully deleted.',
+          type: 'is-success'
+        });
+      });
+    },
+    initData: function initData() {
+      this.global_id = parseInt(this.propId);
+
+      if (this.global_id > 0) {
+        //this.getData();
+        this.data = JSON.parse(this.propData);
+        this.setData();
+      }
+    }
+  },
+  mounted: function mounted() {
+    this.loadDevices();
+    this.initData();
+  }
+});
+
+/***/ }),
+
 /***/ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/Schedule.vue?vue&type=script&lang=js&":
 /*!**************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/Schedule.vue?vue&type=script&lang=js& ***!
@@ -11310,7 +11929,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
 //
 //
 //
@@ -11689,6 +12307,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   props: ['propId'],
   data: function data() {
@@ -11712,7 +12331,7 @@ __webpack_require__.r(__webpack_exports__);
         mon: false,
         tue: false,
         wed: false,
-        thur: false,
+        thu: false,
         fri: false,
         sat: false,
         sun: false
@@ -11746,7 +12365,7 @@ __webpack_require__.r(__webpack_exports__);
         mon: false,
         tue: false,
         wed: false,
-        thur: false,
+        thu: false,
         fri: false,
         sat: false,
         sun: false
@@ -11798,7 +12417,7 @@ __webpack_require__.r(__webpack_exports__);
         _this4.fields.mon = res.data.mon === 1 ? true : false;
         _this4.fields.tue = res.data.tue === 1 ? true : false;
         _this4.fields.wed = res.data.wed === 1 ? true : false;
-        _this4.fields.thur = res.data.thur === 1 ? true : false;
+        _this4.fields.thu = res.data.thu === 1 ? true : false;
         _this4.fields.fri = res.data.fri === 1 ? true : false;
         _this4.fields.sat = res.data.sat === 1 ? true : false;
         _this4.fields.sun = res.data.sun === 1 ? true : false;
@@ -14408,6 +15027,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+//
+//
+//
 //
 //
 //
@@ -35144,6 +35766,54 @@ ___CSS_LOADER_EXPORT___.push([module.id, "\n.logo[data-v-5dc66390]{\n      paddi
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=style&index=0&id=5796712b&scoped=true&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=style&index=0&id=5796712b&scoped=true&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.light-on[data-v-5796712b]{\n    font-weight: bold;\n    color: green;\n}\n.light-off[data-v-5796712b]{\n    font-weight: bold;\n    color: red;\n}\n.pending[data-v-5796712b]{\n    font-weight: bold;\n    color: #1a73bd;\n}\n\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=style&index=0&id=6dee8f30&scoped=true&lang=css&":
+/*!***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=style&index=0&id=6dee8f30&scoped=true&lang=css& ***!
+  \***************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../../../../node_modules/css-loader/dist/runtime/api.js */ "./node_modules/css-loader/dist/runtime/api.js");
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0__);
+// Imports
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "\n.approved[data-v-6dee8f30]{\n    font-weight: bold;\n    color: green;\n}\n.cancelled[data-v-6dee8f30]{\n    font-weight: bold;\n    color: red;\n}\n.pending[data-v-6dee8f30]{\n    font-weight: bold;\n    color: #1a73bd;\n}\n", ""]);
+// Exports
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/Schedule.vue?vue&type=style&index=0&id=fbce1f9c&scoped=true&lang=css&":
 /*!**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/Schedule.vue?vue&type=style&index=0&id=fbce1f9c&scoped=true&lang=css& ***!
@@ -35377,7 +36047,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*    dere lang kubia ang panel color*/\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*    dere lang kubia ang panel color*/\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -35904,6 +36574,66 @@ var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_NavbarComponent_vue_vue_type_style_index_0_id_5dc66390_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=style&index=0&id=5796712b&scoped=true&lang=css&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=style&index=0&id=5796712b&scoped=true&lang=css& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSchedule_vue_vue_type_style_index_0_id_5796712b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GroupSchedule.vue?vue&type=style&index=0&id=5796712b&scoped=true&lang=css& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=style&index=0&id=5796712b&scoped=true&lang=css&");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSchedule_vue_vue_type_style_index_0_id_5796712b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSchedule_vue_vue_type_style_index_0_id_5796712b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
+
+/***/ }),
+
+/***/ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=style&index=0&id=6dee8f30&scoped=true&lang=css&":
+/*!*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=style&index=0&id=6dee8f30&scoped=true&lang=css& ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! !../../../../../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */ "./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js");
+/* harmony import */ var _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupScheduleCreateUpdate_vue_vue_type_style_index_0_id_6dee8f30_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! !!../../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GroupScheduleCreateUpdate.vue?vue&type=style&index=0&id=6dee8f30&scoped=true&lang=css& */ "./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=style&index=0&id=6dee8f30&scoped=true&lang=css&");
+
+            
+
+var options = {};
+
+options.insert = "head";
+options.singleton = false;
+
+var update = _node_modules_style_loader_dist_runtime_injectStylesIntoStyleTag_js__WEBPACK_IMPORTED_MODULE_0___default()(_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupScheduleCreateUpdate_vue_vue_type_style_index_0_id_6dee8f30_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"], options);
+
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupScheduleCreateUpdate_vue_vue_type_style_index_0_id_6dee8f30_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_1__["default"].locals || {});
 
 /***/ }),
 
@@ -37112,6 +37842,88 @@ component.options.__file = "resources/js/components/Administrator/Room/Room.vue"
 
 /***/ }),
 
+/***/ "./resources/js/components/Administrator/Schedule/GroupSchedule.vue":
+/*!**************************************************************************!*\
+  !*** ./resources/js/components/Administrator/Schedule/GroupSchedule.vue ***!
+  \**************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _GroupSchedule_vue_vue_type_template_id_5796712b_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GroupSchedule.vue?vue&type=template&id=5796712b&scoped=true& */ "./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=template&id=5796712b&scoped=true&");
+/* harmony import */ var _GroupSchedule_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GroupSchedule.vue?vue&type=script&lang=js& */ "./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=script&lang=js&");
+/* harmony import */ var _GroupSchedule_vue_vue_type_style_index_0_id_5796712b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GroupSchedule.vue?vue&type=style&index=0&id=5796712b&scoped=true&lang=css& */ "./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=style&index=0&id=5796712b&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _GroupSchedule_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _GroupSchedule_vue_vue_type_template_id_5796712b_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _GroupSchedule_vue_vue_type_template_id_5796712b_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "5796712b",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Administrator/Schedule/GroupSchedule.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue":
+/*!**************************************************************************************!*\
+  !*** ./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue ***!
+  \**************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _GroupScheduleCreateUpdate_vue_vue_type_template_id_6dee8f30_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./GroupScheduleCreateUpdate.vue?vue&type=template&id=6dee8f30&scoped=true& */ "./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=template&id=6dee8f30&scoped=true&");
+/* harmony import */ var _GroupScheduleCreateUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./GroupScheduleCreateUpdate.vue?vue&type=script&lang=js& */ "./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=script&lang=js&");
+/* harmony import */ var _GroupScheduleCreateUpdate_vue_vue_type_style_index_0_id_6dee8f30_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./GroupScheduleCreateUpdate.vue?vue&type=style&index=0&id=6dee8f30&scoped=true&lang=css& */ "./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=style&index=0&id=6dee8f30&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! !../../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+;
+
+
+/* normalize component */
+
+var component = (0,_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _GroupScheduleCreateUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _GroupScheduleCreateUpdate_vue_vue_type_template_id_6dee8f30_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render,
+  _GroupScheduleCreateUpdate_vue_vue_type_template_id_6dee8f30_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns,
+  false,
+  null,
+  "6dee8f30",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue"
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (component.exports);
+
+/***/ }),
+
 /***/ "./resources/js/components/Administrator/Schedule/Schedule.vue":
 /*!*********************************************************************!*\
   !*** ./resources/js/components/Administrator/Schedule/Schedule.vue ***!
@@ -38268,6 +39080,38 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************!*\
+  !*** ./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSchedule_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GroupSchedule.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSchedule_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************!*\
+  !*** ./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupScheduleCreateUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GroupScheduleCreateUpdate.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js??clonedRuleSet-5[0].rules[0].use[0]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=script&lang=js&");
+ /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (_node_modules_babel_loader_lib_index_js_clonedRuleSet_5_0_rules_0_use_0_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupScheduleCreateUpdate_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
 /***/ "./resources/js/components/Administrator/Schedule/Schedule.vue?vue&type=script&lang=js&":
 /*!**********************************************************************************************!*\
   !*** ./resources/js/components/Administrator/Schedule/Schedule.vue?vue&type=script&lang=js& ***!
@@ -38688,6 +39532,32 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=style&index=0&id=5796712b&scoped=true&lang=css&":
+/*!***********************************************************************************************************************************!*\
+  !*** ./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=style&index=0&id=5796712b&scoped=true&lang=css& ***!
+  \***********************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSchedule_vue_vue_type_style_index_0_id_5796712b_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GroupSchedule.vue?vue&type=style&index=0&id=5796712b&scoped=true&lang=css& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=style&index=0&id=5796712b&scoped=true&lang=css&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=style&index=0&id=6dee8f30&scoped=true&lang=css&":
+/*!***********************************************************************************************************************************************!*\
+  !*** ./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=style&index=0&id=6dee8f30&scoped=true&lang=css& ***!
+  \***********************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_dist_cjs_js_node_modules_css_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_dist_cjs_js_clonedRuleSet_9_0_rules_0_use_2_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupScheduleCreateUpdate_vue_vue_type_style_index_0_id_6dee8f30_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/style-loader/dist/cjs.js!../../../../../node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!../../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../../node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GroupScheduleCreateUpdate.vue?vue&type=style&index=0&id=6dee8f30&scoped=true&lang=css& */ "./node_modules/style-loader/dist/cjs.js!./node_modules/css-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[1]!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/dist/cjs.js??clonedRuleSet-9[0].rules[0].use[2]!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=style&index=0&id=6dee8f30&scoped=true&lang=css&");
+
+
+/***/ }),
+
 /***/ "./resources/js/components/Administrator/Schedule/Schedule.vue?vue&type=style&index=0&id=fbce1f9c&scoped=true&lang=css&":
 /*!******************************************************************************************************************************!*\
   !*** ./resources/js/components/Administrator/Schedule/Schedule.vue?vue&type=style&index=0&id=fbce1f9c&scoped=true&lang=css& ***!
@@ -39083,6 +39953,40 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Room_vue_vue_type_template_id_0a2c21b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
 /* harmony export */ });
 /* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_Room_vue_vue_type_template_id_0a2c21b2_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./Room.vue?vue&type=template&id=0a2c21b2&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Room/Room.vue?vue&type=template&id=0a2c21b2&scoped=true&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=template&id=5796712b&scoped=true&":
+/*!*********************************************************************************************************************!*\
+  !*** ./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=template&id=5796712b&scoped=true& ***!
+  \*********************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSchedule_vue_vue_type_template_id_5796712b_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSchedule_vue_vue_type_template_id_5796712b_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupSchedule_vue_vue_type_template_id_5796712b_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GroupSchedule.vue?vue&type=template&id=5796712b&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=template&id=5796712b&scoped=true&");
+
+
+/***/ }),
+
+/***/ "./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=template&id=6dee8f30&scoped=true&":
+/*!*********************************************************************************************************************************!*\
+  !*** ./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=template&id=6dee8f30&scoped=true& ***!
+  \*********************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupScheduleCreateUpdate_vue_vue_type_template_id_6dee8f30_scoped_true___WEBPACK_IMPORTED_MODULE_0__.render),
+/* harmony export */   "staticRenderFns": () => (/* reexport safe */ _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupScheduleCreateUpdate_vue_vue_type_template_id_6dee8f30_scoped_true___WEBPACK_IMPORTED_MODULE_0__.staticRenderFns)
+/* harmony export */ });
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_GroupScheduleCreateUpdate_vue_vue_type_template_id_6dee8f30_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../../node_modules/vue-loader/lib/index.js??vue-loader-options!./GroupScheduleCreateUpdate.vue?vue&type=template&id=6dee8f30&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=template&id=6dee8f30&scoped=true&");
 
 
 /***/ }),
@@ -43479,6 +44383,15 @@ var render = function () {
                         },
                       }),
                       _vm._v(" "),
+                      _c("b-menu-item", {
+                        attrs: {
+                          label: "Group Schedule",
+                          icon: "domain",
+                          tag: "a",
+                          href: "/group-schedules",
+                        },
+                      }),
+                      _vm._v(" "),
                       _vm.user.role === "ADMINISTRATOR"
                         ? _c("b-menu-item", {
                             attrs: {
@@ -44851,6 +45764,931 @@ render._withStripped = true
 
 /***/ }),
 
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=template&id=5796712b&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupSchedule.vue?vue&type=template&id=5796712b&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "section" }, [
+      _c("div", { staticClass: "columns is-centered" }, [
+        _c("div", { staticClass: "column is-10-desktop is-10-tablet" }, [
+          _c(
+            "div",
+            { staticClass: "box" },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "is-flex is-justify-content-center mb-2",
+                  staticStyle: { "font-size": "20px", "font-weight": "bold" },
+                },
+                [_vm._v("LIST OF GROUP SCHEDULES")]
+              ),
+              _vm._v(" "),
+              _c("div", { staticClass: "level" }, [
+                _c(
+                  "div",
+                  { staticClass: "level-left" },
+                  [
+                    _c(
+                      "b-field",
+                      { attrs: { label: "Page" } },
+                      [
+                        _c(
+                          "b-select",
+                          {
+                            on: { input: _vm.setPerPage },
+                            model: {
+                              value: _vm.perPage,
+                              callback: function ($$v) {
+                                _vm.perPage = $$v
+                              },
+                              expression: "perPage",
+                            },
+                          },
+                          [
+                            _c("option", { attrs: { value: "5" } }, [
+                              _vm._v("5 per page"),
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "10" } }, [
+                              _vm._v("10 per page"),
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "15" } }, [
+                              _vm._v("15 per page"),
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "20" } }, [
+                              _vm._v("20 per page"),
+                            ]),
+                          ]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "b-select",
+                          {
+                            on: { input: _vm.loadAsyncData },
+                            model: {
+                              value: _vm.sortOrder,
+                              callback: function ($$v) {
+                                _vm.sortOrder = $$v
+                              },
+                              expression: "sortOrder",
+                            },
+                          },
+                          [
+                            _c("option", { attrs: { value: "asc" } }, [
+                              _vm._v("ASC"),
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "desc" } }, [
+                              _vm._v("DESC"),
+                            ]),
+                          ]
+                        ),
+                      ],
+                      1
+                    ),
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "level-right" }, [
+                  _c(
+                    "div",
+                    { staticClass: "level-item" },
+                    [
+                      _c(
+                        "b-field",
+                        { attrs: { label: "Search" } },
+                        [
+                          _c("b-input", {
+                            attrs: { type: "text", placeholder: "Search" },
+                            nativeOn: {
+                              keyup: function ($event) {
+                                if (
+                                  !$event.type.indexOf("key") &&
+                                  _vm._k(
+                                    $event.keyCode,
+                                    "enter",
+                                    13,
+                                    $event.key,
+                                    "Enter"
+                                  )
+                                ) {
+                                  return null
+                                }
+                                return _vm.loadAsyncData.apply(null, arguments)
+                              },
+                            },
+                            model: {
+                              value: _vm.search.app_date,
+                              callback: function ($$v) {
+                                _vm.$set(_vm.search, "app_date", $$v)
+                              },
+                              expression: "search.app_date",
+                            },
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "p",
+                            { staticClass: "control" },
+                            [
+                              _c(
+                                "b-tooltip",
+                                {
+                                  attrs: {
+                                    label: "Search",
+                                    type: "is-success",
+                                  },
+                                },
+                                [
+                                  _c("b-button", {
+                                    attrs: {
+                                      type: "is-primary",
+                                      "icon-right": "account-filter",
+                                    },
+                                    on: { click: _vm.loadAsyncData },
+                                  }),
+                                ],
+                                1
+                              ),
+                            ],
+                            1
+                          ),
+                        ],
+                        1
+                      ),
+                    ],
+                    1
+                  ),
+                ]),
+              ]),
+              _vm._v(" "),
+              _c(
+                "b-table",
+                {
+                  attrs: {
+                    data: _vm.data,
+                    loading: _vm.loading,
+                    paginated: "",
+                    detailed: "",
+                    "backend-pagination": "",
+                    total: _vm.total,
+                    "per-page": _vm.perPage,
+                    "aria-next-label": "Next page",
+                    "aria-previous-label": "Previous page",
+                    "aria-page-label": "Page",
+                    "aria-current-label": "Current page",
+                    "backend-sorting": "",
+                    "default-sort-direction": _vm.defaultSortDirection,
+                  },
+                  on: { "page-change": _vm.onPageChange, sort: _vm.onSort },
+                  scopedSlots: _vm._u([
+                    {
+                      key: "detail",
+                      fn: function (props) {
+                        return [
+                          _c("th", [
+                            _vm._v(
+                              "\n                                Device\n                            "
+                            ),
+                          ]),
+                          _vm._v(" "),
+                          _c("th", [
+                            _vm._v(
+                              "\n                                IP Address\n                            "
+                            ),
+                          ]),
+                          _vm._v(" "),
+                          _vm._l(
+                            props.row.group_schedule_devices,
+                            function (item, index) {
+                              return _c("tr", { key: index }, [
+                                _c("td", [
+                                  _vm._v(_vm._s(item.device.device_name)),
+                                ]),
+                                _vm._v(" "),
+                                _c("td", [
+                                  _vm._v(_vm._s(item.device.device_ip)),
+                                ]),
+                              ])
+                            }
+                          ),
+                        ]
+                      },
+                    },
+                  ]),
+                },
+                [
+                  _c("b-table-column", {
+                    attrs: { field: "group_schedule_id", label: "ID" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(props.row.group_schedule_id) +
+                                "\n                        "
+                            ),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                  _vm._v(" "),
+                  _c("b-table-column", {
+                    attrs: { field: "schedule_name", label: "Schedule Name" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(props.row.schedule_name) +
+                                "\n                        "
+                            ),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                  _vm._v(" "),
+                  _c("b-table-column", {
+                    attrs: { field: "date_time", label: "Date and Time" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            props.row.date_time
+                              ? _c("span", [
+                                  _vm._v(
+                                    _vm._s(props.row.date_time.toLocaleString())
+                                  ),
+                                ])
+                              : _vm._e(),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                  _vm._v(" "),
+                  _c("b-table-column", {
+                    attrs: { field: "schedule_on", label: "Schedule On" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            props.row.schedule_on
+                              ? _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("formatTime")(
+                                        props.row.schedule_on
+                                      )
+                                    )
+                                  ),
+                                ])
+                              : _vm._e(),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                  _vm._v(" "),
+                  _c("b-table-column", {
+                    attrs: { field: "schedule_off", label: "Schedule Off" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            props.row.schedule_off
+                              ? _c("span", [
+                                  _vm._v(
+                                    _vm._s(
+                                      _vm._f("formatTime")(
+                                        props.row.schedule_off
+                                      )
+                                    )
+                                  ),
+                                ])
+                              : _vm._e(),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                  _vm._v(" "),
+                  _c("b-table-column", {
+                    attrs: { field: "system_action", label: "System Action" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            props.row.system_action === "ON"
+                              ? _c("span", { staticClass: "light-on" }, [
+                                  _vm._v("ON"),
+                                ])
+                              : props.row.system_action === "OFF"
+                              ? _c("span", { staticClass: "light-off" }, [
+                                  _vm._v("OFF"),
+                                ])
+                              : _c("span"),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                  _vm._v(" "),
+                  _c("b-table-column", {
+                    attrs: { field: "user_interact", label: "User Interact" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(props.row.ntuser) +
+                                "\n                        "
+                            ),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                  _vm._v(" "),
+                  _c("b-table-column", {
+                    attrs: { label: "Action" },
+                    scopedSlots: _vm._u([
+                      {
+                        key: "default",
+                        fn: function (props) {
+                          return [
+                            _c(
+                              "div",
+                              { staticClass: "is-flex" },
+                              [
+                                _c(
+                                  "b-tooltip",
+                                  {
+                                    attrs: {
+                                      label: "Edit",
+                                      type: "is-warning",
+                                    },
+                                  },
+                                  [
+                                    _c("b-button", {
+                                      staticClass:
+                                        "button is-small is-warning mr-1",
+                                      attrs: {
+                                        "icon-right": "pencil",
+                                        tag: "a",
+                                        href:
+                                          "/group-schedules/" +
+                                          props.row.group_schedule_id +
+                                          "/edit",
+                                      },
+                                    }),
+                                  ],
+                                  1
+                                ),
+                                _vm._v(" "),
+                                _c(
+                                  "b-tooltip",
+                                  {
+                                    attrs: {
+                                      label: "Delete",
+                                      type: "is-danger",
+                                    },
+                                  },
+                                  [
+                                    _c("b-button", {
+                                      staticClass:
+                                        "button is-small is-danger mr-1",
+                                      attrs: { "icon-right": "delete" },
+                                      on: {
+                                        click: function ($event) {
+                                          return _vm.confirmDelete(
+                                            props.row.group_schedule_id
+                                          )
+                                        },
+                                      },
+                                    }),
+                                  ],
+                                  1
+                                ),
+                              ],
+                              1
+                            ),
+                          ]
+                        },
+                      },
+                    ]),
+                  }),
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "buttons mt-3" },
+                [
+                  _c(
+                    "b-button",
+                    {
+                      staticClass: "is-success",
+                      attrs: {
+                        tag: "a",
+                        href: "/group-schedules/create",
+                        "icon-right": "account-arrow-up-outline",
+                      },
+                    },
+                    [_vm._v("NEW")]
+                  ),
+                ],
+                1
+              ),
+            ],
+            1
+          ),
+        ]),
+      ]),
+    ]),
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=template&id=6dee8f30&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue?vue&type=template&id=6dee8f30&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "render": () => (/* binding */ render),
+/* harmony export */   "staticRenderFns": () => (/* binding */ staticRenderFns)
+/* harmony export */ });
+var render = function () {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "section" }, [
+      _c("div", { staticClass: "columns is-centered" }, [
+        _c("div", { staticClass: "column is-6-desktop is-10-tablet" }, [
+          _c("div", { staticClass: "box" }, [
+            _c(
+              "div",
+              {
+                staticClass: "is-flex is-justify-content-center mb-2",
+                staticStyle: { "font-size": "20px", "font-weight": "bold" },
+              },
+              [_vm._v("Create/Update Group Schedule")]
+            ),
+            _vm._v(" "),
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function ($event) {
+                    $event.preventDefault()
+                    return _vm.submit.apply(null, arguments)
+                  },
+                },
+              },
+              [
+                _c(
+                  "div",
+                  {},
+                  [
+                    _c(
+                      "b-field",
+                      {
+                        attrs: {
+                          label: "Schedule Name",
+                          "label-position": "on-border",
+                          type: this.errors.schedule_name ? "is-danger" : "",
+                          message: this.errors.schedule_name
+                            ? this.errors.schedule_name[0]
+                            : "",
+                        },
+                      },
+                      [
+                        _c("b-input", {
+                          attrs: { type: "text", placeholder: "Schedule Name" },
+                          model: {
+                            value: _vm.fields.schedule_name,
+                            callback: function ($$v) {
+                              _vm.$set(_vm.fields, "schedule_name", $$v)
+                            },
+                            expression: "fields.schedule_name",
+                          },
+                        }),
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-field",
+                      {
+                        attrs: {
+                          label: "Enter some tags",
+                          "label-position": "on-border",
+                        },
+                      },
+                      [
+                        _c("b-taginput", {
+                          attrs: {
+                            data: _vm.devices,
+                            autocomplete: "",
+                            "allow-new": false,
+                            "open-on-focus": false,
+                            field: "device_name",
+                            icon: "label",
+                            placeholder: "Add a device",
+                          },
+                          on: {
+                            remove: _vm.removeDevice,
+                            typing: _vm.getFilteredTags,
+                          },
+                          model: {
+                            value: _vm.fields.devices,
+                            callback: function ($$v) {
+                              _vm.$set(_vm.fields, "devices", $$v)
+                            },
+                            expression: "fields.devices",
+                          },
+                        }),
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-field",
+                      {
+                        attrs: {
+                          label: "Please select an option",
+                          "label-position": "on-border",
+                          expanded: "",
+                        },
+                      },
+                      [
+                        _c(
+                          "b-select",
+                          {
+                            attrs: { expanded: "" },
+                            model: {
+                              value: _vm.fields.action_type,
+                              callback: function ($$v) {
+                                _vm.$set(_vm.fields, "action_type", $$v)
+                              },
+                              expression: "fields.action_type",
+                            },
+                          },
+                          [
+                            _c("option", { domProps: { value: 0 } }, [
+                              _vm._v("SPECIFIC DATE"),
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { domProps: { value: 1 } }, [
+                              _vm._v("CUSTOM DAYS"),
+                            ]),
+                          ]
+                        ),
+                      ],
+                      1
+                    ),
+                    _vm._v(" "),
+                    _vm.fields.action_type == 0
+                      ? _c(
+                          "div",
+                          [
+                            _c(
+                              "b-field",
+                              {
+                                staticClass: "is-centered",
+                                attrs: {
+                                  label: "Select Date Time",
+                                  grouped: "",
+                                  expanded: "",
+                                  "label-position": "on-border",
+                                  type: this.errors.date_time
+                                    ? "is-danger"
+                                    : "",
+                                  message: this.errors.date_time
+                                    ? this.errors.date_time[0]
+                                    : "",
+                                },
+                              },
+                              [
+                                _c("b-datetimepicker", {
+                                  attrs: {
+                                    expanded: "",
+                                    placeholder: "Type or select a date...",
+                                    icon: "calendar-today",
+                                    locale: _vm.locale,
+                                    editable: "",
+                                  },
+                                  model: {
+                                    value: _vm.fields.date_time,
+                                    callback: function ($$v) {
+                                      _vm.$set(_vm.fields, "date_time", $$v)
+                                    },
+                                    expression: "fields.date_time",
+                                  },
+                                }),
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-field",
+                              {
+                                attrs: {
+                                  label: "System Action",
+                                  "label-position": "on-border",
+                                  expanded: "",
+                                },
+                              },
+                              [
+                                _c(
+                                  "b-select",
+                                  {
+                                    attrs: { expanded: "" },
+                                    model: {
+                                      value: _vm.fields.system_action,
+                                      callback: function ($$v) {
+                                        _vm.$set(
+                                          _vm.fields,
+                                          "system_action",
+                                          $$v
+                                        )
+                                      },
+                                      expression: "fields.system_action",
+                                    },
+                                  },
+                                  [
+                                    _c("option", { attrs: { value: "ON" } }, [
+                                      _vm._v("ON"),
+                                    ]),
+                                    _vm._v(" "),
+                                    _c("option", { attrs: { value: "OFF" } }, [
+                                      _vm._v("OFF"),
+                                    ]),
+                                  ]
+                                ),
+                              ],
+                              1
+                            ),
+                          ],
+                          1
+                        )
+                      : _vm._e(),
+                    _vm._v(" "),
+                    _vm.fields.action_type == 1
+                      ? _c(
+                          "div",
+                          [
+                            _c("hr"),
+                            _vm._v(" "),
+                            _c(
+                              "b-field",
+                              {
+                                staticClass: "is-centered",
+                                attrs: {
+                                  label: "Schedule On",
+                                  grouped: "",
+                                  expanded: "",
+                                  "label-position": "on-border",
+                                  type: this.errors.schedule_on
+                                    ? "is-danger"
+                                    : "",
+                                  message: this.errors.schedule_on
+                                    ? this.errors.schedule_on[0]
+                                    : "",
+                                },
+                              },
+                              [
+                                _c("b-timepicker", {
+                                  attrs: {
+                                    expanded: "",
+                                    icon: "calendar-today",
+                                    locale: _vm.locale,
+                                    editable: "",
+                                  },
+                                  model: {
+                                    value: _vm.fields.schedule_on,
+                                    callback: function ($$v) {
+                                      _vm.$set(_vm.fields, "schedule_on", $$v)
+                                    },
+                                    expression: "fields.schedule_on",
+                                  },
+                                }),
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "b-field",
+                              {
+                                staticClass: "is-centered",
+                                attrs: {
+                                  label: "Schedule Off",
+                                  grouped: "",
+                                  expanded: "",
+                                  "label-position": "on-border",
+                                  type: this.errors.schedule_off
+                                    ? "is-danger"
+                                    : "",
+                                  message: this.errors.schedule_off
+                                    ? this.errors.schedule_off[0]
+                                    : "",
+                                },
+                              },
+                              [
+                                _c("b-timepicker", {
+                                  attrs: {
+                                    expanded: "",
+                                    icon: "calendar-today",
+                                    locale: _vm.locale,
+                                    editable: "",
+                                  },
+                                  model: {
+                                    value: _vm.fields.schedule_off,
+                                    callback: function ($$v) {
+                                      _vm.$set(_vm.fields, "schedule_off", $$v)
+                                    },
+                                    expression: "fields.schedule_off",
+                                  },
+                                }),
+                              ],
+                              1
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "div",
+                              [
+                                _c(
+                                  "b-field",
+                                  { attrs: { label: "Days" } },
+                                  [
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.mon,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "mon", $$v)
+                                          },
+                                          expression: "fields.mon",
+                                        },
+                                      },
+                                      [_vm._v("Mon")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.tue,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "tue", $$v)
+                                          },
+                                          expression: "fields.tue",
+                                        },
+                                      },
+                                      [_vm._v("Tue")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.wed,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "wed", $$v)
+                                          },
+                                          expression: "fields.wed",
+                                        },
+                                      },
+                                      [_vm._v("Wed")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.thu,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "thu", $$v)
+                                          },
+                                          expression: "fields.thu",
+                                        },
+                                      },
+                                      [_vm._v("Thu")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.fri,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "fri", $$v)
+                                          },
+                                          expression: "fields.fri",
+                                        },
+                                      },
+                                      [_vm._v("Fri")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.sat,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "sat", $$v)
+                                          },
+                                          expression: "fields.sat",
+                                        },
+                                      },
+                                      [_vm._v("Sat")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "b-checkbox",
+                                      {
+                                        model: {
+                                          value: _vm.fields.sun,
+                                          callback: function ($$v) {
+                                            _vm.$set(_vm.fields, "sun", $$v)
+                                          },
+                                          expression: "fields.sun",
+                                        },
+                                      },
+                                      [_vm._v("Sun")]
+                                    ),
+                                  ],
+                                  1
+                                ),
+                              ],
+                              1
+                            ),
+                          ],
+                          1
+                        )
+                      : _vm._e(),
+                  ],
+                  1
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "buttons mt-4" }, [
+                  _c("button", { class: _vm.btnClass }, [_vm._v("SAVE")]),
+                ]),
+              ]
+            ),
+          ]),
+        ]),
+      ]),
+    ]),
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
 /***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/Schedule.vue?vue&type=template&id=fbce1f9c&scoped=true&":
 /*!*******************************************************************************************************************************************************************************************************************************************************!*\
   !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib/index.js??vue-loader-options!./resources/js/components/Administrator/Schedule/Schedule.vue?vue&type=template&id=fbce1f9c&scoped=true& ***!
@@ -45056,9 +46894,9 @@ var render = function () {
                         fn: function (props) {
                           return [
                             _vm._v(
-                              "\n                                " +
+                              "\n                            " +
                                 _vm._s(props.row.schedule_id) +
-                                "\n                            "
+                                "\n                        "
                             ),
                           ]
                         },
@@ -45074,9 +46912,9 @@ var render = function () {
                         fn: function (props) {
                           return [
                             _vm._v(
-                              "\n                                " +
+                              "\n                            " +
                                 _vm._s(props.row.device.device_name) +
-                                "\n                            "
+                                "\n                        "
                             ),
                           ]
                         },
@@ -45092,9 +46930,9 @@ var render = function () {
                         fn: function (props) {
                           return [
                             _vm._v(
-                              "\n                                " +
+                              "\n                            " +
                                 _vm._s(props.row.schedule_name) +
-                                "\n                            "
+                                "\n                        "
                             ),
                           ]
                         },
@@ -45200,9 +47038,9 @@ var render = function () {
                         fn: function (props) {
                           return [
                             _vm._v(
-                              "\n                                " +
+                              "\n                            " +
                                 _vm._s(props.row.ntuser) +
-                                "\n                            "
+                                "\n                        "
                             ),
                           ]
                         },
@@ -45335,8 +47173,17 @@ var render = function () {
   return _c("div", [
     _c("div", { staticClass: "section" }, [
       _c("div", { staticClass: "columns is-centered" }, [
-        _c("div", { staticClass: "column is-6" }, [
+        _c("div", { staticClass: "column is-6-desktop is-10-tablet" }, [
           _c("div", { staticClass: "box" }, [
+            _c(
+              "div",
+              {
+                staticClass: "is-flex is-justify-content-center mb-2",
+                staticStyle: { "font-size": "20px", "font-weight": "bold" },
+              },
+              [_vm._v("Create/Update Group Schedule")]
+            ),
+            _vm._v(" "),
             _c(
               "form",
               {
@@ -45674,14 +47521,14 @@ var render = function () {
                                       "b-checkbox",
                                       {
                                         model: {
-                                          value: _vm.fields.thur,
+                                          value: _vm.fields.thu,
                                           callback: function ($$v) {
-                                            _vm.$set(_vm.fields, "thur", $$v)
+                                            _vm.$set(_vm.fields, "thu", $$v)
                                           },
-                                          expression: "fields.thur",
+                                          expression: "fields.thu",
                                         },
                                       },
-                                      [_vm._v("Thur")]
+                                      [_vm._v("Thu")]
                                     ),
                                     _vm._v(" "),
                                     _c(
@@ -75693,6 +77540,8 @@ var map = {
 	"./components/Administrator/Office/OfficePage.vue": "./resources/js/components/Administrator/Office/OfficePage.vue",
 	"./components/Administrator/Report/ReportAppointment.vue": "./resources/js/components/Administrator/Report/ReportAppointment.vue",
 	"./components/Administrator/Room/Room.vue": "./resources/js/components/Administrator/Room/Room.vue",
+	"./components/Administrator/Schedule/GroupSchedule.vue": "./resources/js/components/Administrator/Schedule/GroupSchedule.vue",
+	"./components/Administrator/Schedule/GroupScheduleCreateUpdate.vue": "./resources/js/components/Administrator/Schedule/GroupScheduleCreateUpdate.vue",
 	"./components/Administrator/Schedule/Schedule.vue": "./resources/js/components/Administrator/Schedule/Schedule.vue",
 	"./components/Administrator/Schedule/ScheduleCreateUpdate.vue": "./resources/js/components/Administrator/Schedule/ScheduleCreateUpdate.vue",
 	"./components/Administrator/Services/ServicesPage.vue": "./resources/js/components/Administrator/Services/ServicesPage.vue",

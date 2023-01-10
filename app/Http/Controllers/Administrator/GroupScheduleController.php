@@ -2,51 +2,46 @@
 
 namespace App\Http\Controllers\Administrator;
 
-use App\Models\Schedule;
-use App\Models\Syslog;
-
-use Auth;
-
+use App\Models\GroupRole;
+use App\Models\GroupScheduleDevice;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Auth;
+use App\Models\GroupSchedule;
 
-class ScheduleController extends Controller
+
+class GroupScheduleController extends Controller
 {
     //
-
     public function __construct(){
         $this->middleware('auth');
-
     }
 
     public function index(){
-        return view('panel.schedule');
-    }
-
-    public function getSchedules(Request $req){
-        $sort = explode('.', $req->sort_by);
-
-        $dateFrom =  $req->date_from;
-        $nDateFrom = date("Y-m-d", strtotime($dateFrom)); //convert to date format UNIX
-
-        $dateTo = $req->date_to;
-        $nDateTo = date('H:i:s',strtotime($dateTo)); //convert to format time UNIX
-
-
-        $data = Schedule::with(['device'])
-            //->whereBetween('date_from', [$nDateFrom, $nDateTo])
-            ->orderBy($sort[0], $sort[1])
-            ->paginate($req->perpage);
-        return $data;
-    }
-
-    public function show($id){
-        return Schedule::find($id);
+        return view('panel.group-schedule');
     }
 
     public function create(){
-        return view('panel.schedule-create-update')
+        return view('panel.group-schedule-create-update')
             ->with('id', 0);
+    }
+
+
+    public function groupSchedules(Request $req){
+        $sort = explode('.', $req->sort_by);
+
+        //$dateFrom =  $req->date_from;
+        //$nDateFrom = date("Y-m-d", strtotime($dateFrom)); //convert to date format UNIX
+
+        //$dateTo = $req->date_to;
+       // $nDateTo = date('H:i:s',strtotime($dateTo)); //convert to format time UNIX
+
+        $data = GroupSchedule::with(['group_schedule_devices'])
+            //->whereBetween('date_from', [$nDateFrom, $nDateTo])
+            ->orderBy($sort[0], $sort[1])
+            ->paginate($req->perpage);
+
+        return $data;
     }
 
     public function store(Request $req){
@@ -54,7 +49,6 @@ class ScheduleController extends Controller
 
         if($req->action_type == 0){
             $req->validate([
-                'device' => ['required'],
                 'schedule_name' => ['required'],
                  'date_time' => ['required'],
                 // 'system_action' => ['required'],
@@ -64,7 +58,6 @@ class ScheduleController extends Controller
             ]);
         }else{
             $req->validate([
-                'device' => ['required'],
                 'schedule_name' => ['required'],
                 //'date_time' => ['required'],
                 // 'system_action' => ['required'],
@@ -84,9 +77,8 @@ class ScheduleController extends Controller
 
         $user = Auth::user();
 
-        $data = Schedule::create([
-            'device_id' => $req->device,
-            'schedule_name' => strtoupper($req->schedule_name),
+        $data = GroupSchedule::create([
+            'schedule_name' => $req->schedule_name,
             'date_time' => $req->action_type == 0 ? $nDateTime : null,
             'system_action' => $req->action_type == 0 ? $req->system_action : null,
             'action_type' => $req->action_type,
@@ -99,14 +91,14 @@ class ScheduleController extends Controller
             'fri' => $req->fri,
             'sat' => $req->sat,
             'sun' => $req->sun,
-            'ntuser' => $user->username,
         ]);
 
-
-        Syslog::create([
-            'syslog' => 'Schedule ' .$data->schedule_id . '('. $data->schedule_name.') created.',
-            'username' => $user->username
-        ]);
+        foreach($req->devices as $device){
+            GroupScheduleDevice::create([
+                'group_schedule_id' => $data->group_schedule_id,
+                'device_id' => $device['device_id']
+            ]);
+        }
 
         return response()->json([
             'status' => 'saved'
@@ -115,28 +107,25 @@ class ScheduleController extends Controller
 
 
     public function edit($id){
-        return view('panel.schedule-create-update')
+
+        $data = GroupSchedule::with(['group_schedule_devices'])
+            ->find($id);
+
+        return view('panel.group-schedule-create-update')
+            ->with('data', $data)
             ->with('id', $id);
     }
+
     public function update(Request $req, $id){
 
         if($req->action_type == 0){
             $req->validate([
-                'device' => ['required'],
                 'schedule_name' => ['required'],
-                 'date_time' => ['required'],
-                // 'system_action' => ['required'],
-                // 'action_type' => ['required'],
-                //'schedule_on' => ['required'],
-                //'schedule_off' => ['required'],
+                'date_time' => ['required'],
             ]);
         }else{
             $req->validate([
-                'device' => ['required'],
                 'schedule_name' => ['required'],
-                //'date_time' => ['required'],
-                // 'system_action' => ['required'],
-                // 'action_type' => ['required'],
                 'schedule_on' => ['required'],
                 'schedule_off' => ['required'],
             ]);
@@ -149,14 +138,12 @@ class ScheduleController extends Controller
             $scheduleOn = date("H:i:s", strtotime($req->schedule_on)); //convert to date format UNIX
             $scheduleOff = date("H:i:s", strtotime($req->schedule_off)); //convert to date format UNIX
         }
-        $user = Auth::user();
 
-        $data = Schedule::find($id);
-        $data->device_id  = $req->device;
+
+        $data = GroupSchedule::find($id);
         $data->schedule_name  = $req->schedule_name;
         $data->date_time = $req->action_type == 0 ? $nDateTime : null;
         $data->system_action = $req->action_type == 0 ? $req->system_action : null;
-        // $data->action_type = $req->action_type;
         $data->schedule_on = $req->action_type == 1 ? $scheduleOn : null;
         $data->schedule_off = $req->action_type == 1 ? $scheduleOff : null;
 
@@ -167,32 +154,36 @@ class ScheduleController extends Controller
         $data->fri = $req->fri;
         $data->sat = $req->sat;
         $data->sun = $req->sun;
-        $data->ntuser = $user->username;
+
         $data->save();
 
-        Syslog::create([
-            'syslog' => 'Schedule ' .$data->schedule_id . '('. $data->schedule_name.') updated.',
-            'username' => $user->username
-        ]);
+        foreach($req->devices as $device){
+            GroupScheduleDevice::updateOrCreate([
+                'group_schedule_id' => $data->group_schedule_id,
+                'device_id' => $device['device_id']
+            ],[
+                'group_schedule_id' => $data->group_schedule_id,
+                'device_id' => $device['device_id']
+            ]);
+        }
 
         return response()->json([
             'status' => 'updated'
-        ],200);
+        ], 200);
     }
 
-
-    public function destroy($id){
-        $data = Schedule::find($id);
-        Schedule::destroy($id);
-
-        $user = Auth::user();
-        Syslog::create([
-            'syslog' => 'Schedule ' .$data->schedule_id . '('. $data->schedule_name.') deleted.',
-            'username' => $user->username
-        ]);
+    public function deleteGroupScheduleDevice($id){
+        GroupScheduleDevice::destroy($id);
 
         return response()->json([
-            'status' => 'deleted'
+            'status' => 'delete'
+        ], 200);
+    }
+    public function destroy($id){
+        GroupSchedule::destroy($id);
+
+        return response()->json([
+            'status' => 'delete'
         ], 200);
     }
 
