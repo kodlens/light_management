@@ -79,8 +79,8 @@ CREATE TABLE `devices` (
 /*Data for the table `devices` */
 
 insert  into `devices`(`device_id`,`room_id`,`device_name`,`device_ip`,`device_token_on`,`device_token_off`,`ntuser`,`created_at`,`updated_at`) values 
-(7,1,'DEVICE 01','192.168.1.55','f2315ab8261c9a91721ecdb8b8bc4850','d5d733853d59b050de02bf09f4c9697a',NULL,'2022-12-27 09:13:23','2022-12-27 09:13:23'),
-(8,3,'DEVICE 02','192.168.1.56','13be72506a5f2251c42a0623239aaca7','13be72506a5f2251c42a0623239aaca7',NULL,'2022-12-27 09:13:52','2022-12-27 09:29:18');
+(7,1,'DEVICE 01','192.168.254.80','284d6b23c62639f7d091957c4bcd383e','cbe75359e299cacb7f0fc1bf1b471483',NULL,'2022-12-27 09:13:23','2023-01-11 14:07:50'),
+(8,3,'DEVICE 02','192.168.254.82','284d6b23c62639f7d091957c4bcd383e','cbe75359e299cacb7f0fc1bf1b471483',NULL,'2022-12-27 09:13:52','2023-01-11 14:01:36');
 
 /*Table structure for table `failed_jobs` */
 
@@ -151,16 +151,23 @@ CREATE TABLE `group_schedule_devices` (
   PRIMARY KEY (`group_schedule_device_id`),
   KEY `group_schedule_id` (`group_schedule_id`),
   CONSTRAINT `group_schedule_devices_ibfk_1` FOREIGN KEY (`group_schedule_id`) REFERENCES `group_schedules` (`group_schedule_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `group_schedule_devices` */
 
 insert  into `group_schedule_devices`(`group_schedule_device_id`,`group_schedule_id`,`device_id`,`created_at`,`updated_at`) values 
 (3,12,7,'2023-01-10 21:34:16','2023-01-10 21:34:16'),
 (9,12,8,'2023-01-10 23:07:53','2023-01-10 23:07:53'),
-(10,13,7,'2023-01-10 23:08:51','2023-01-10 23:08:51'),
-(11,13,8,'2023-01-10 23:08:51','2023-01-10 23:08:51'),
-(12,14,7,'2023-01-10 23:19:45','2023-01-10 23:19:45');
+(13,15,7,'2023-01-11 14:27:51','2023-01-11 14:27:51'),
+(14,16,7,'2023-01-11 14:40:26','2023-01-11 14:40:26'),
+(15,17,7,'2023-01-11 14:41:22','2023-01-11 14:41:22'),
+(16,17,8,'2023-01-11 14:41:22','2023-01-11 14:41:22'),
+(17,18,7,'2023-01-11 14:41:45','2023-01-11 14:41:45'),
+(18,18,8,'2023-01-11 14:41:45','2023-01-11 14:41:45'),
+(19,19,7,'2023-01-11 14:42:05','2023-01-11 14:42:05'),
+(20,19,8,'2023-01-11 14:42:05','2023-01-11 14:42:05'),
+(21,20,7,'2023-01-11 14:50:55','2023-01-11 14:50:55'),
+(22,20,8,'2023-01-11 14:50:55','2023-01-11 14:50:55');
 
 /*Table structure for table `group_schedules` */
 
@@ -184,14 +191,18 @@ CREATE TABLE `group_schedules` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`group_schedule_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4;
 
 /*Data for the table `group_schedules` */
 
 insert  into `group_schedules`(`group_schedule_id`,`schedule_name`,`date_time`,`system_action`,`action_type`,`schedule_on`,`schedule_off`,`mon`,`tue`,`wed`,`thu`,`fri`,`sat`,`sun`,`created_at`,`updated_at`) values 
-(12,'sample sched','2023-01-10 21:34:06','ON','0',NULL,NULL,0,0,0,NULL,0,0,0,'2023-01-10 21:34:16','2023-01-10 23:08:07'),
-(13,'sample 2 schedule',NULL,NULL,'1','08:00:00','10:00:00',1,0,1,NULL,1,0,0,'2023-01-10 23:08:51','2023-01-10 23:08:51'),
-(14,'asdaw','2023-01-10 23:19:31','ON','0',NULL,NULL,0,0,0,0,0,0,0,'2023-01-10 23:19:45','2023-01-10 23:20:06');
+(12,'sample sched','2023-01-11 14:38:00','OFF','0',NULL,NULL,0,0,0,0,0,0,0,'2023-01-10 21:34:16','2023-01-11 14:37:36'),
+(15,'asdaw','2023-01-11 14:40:00','OFF','0',NULL,NULL,0,0,0,0,0,0,0,'2023-01-11 14:27:50','2023-01-11 14:39:13'),
+(16,'Sample On device 1','2023-01-11 14:41:00','ON','0',NULL,NULL,0,0,0,0,0,0,0,'2023-01-11 14:40:26','2023-01-11 14:40:26'),
+(17,'Turn Off both lights','2023-01-11 14:42:00','OFF','0',NULL,NULL,0,0,0,0,0,0,0,'2023-01-11 14:41:22','2023-01-11 14:41:22'),
+(18,'Turn On lighst','2023-01-11 14:43:00','ON','0',NULL,NULL,0,0,0,0,0,0,0,'2023-01-11 14:41:45','2023-01-11 14:41:45'),
+(19,'turn off sia','2023-01-11 14:45:00','OFF','0',NULL,NULL,0,0,0,0,0,0,0,'2023-01-11 14:42:05','2023-01-11 14:42:05'),
+(20,'Custom day',NULL,NULL,'1','14:59:00','15:00:00',0,0,1,0,0,0,0,'2023-01-11 14:50:55','2023-01-11 14:57:31');
 
 /*Table structure for table `migrations` */
 
@@ -326,7 +337,7 @@ CREATE TABLE `syslogs` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=188 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=262 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*Data for the table `syslogs` */
 
@@ -517,7 +528,81 @@ insert  into `syslogs`(`id`,`syslog`,`username`,`action_type`,`created_at`,`upda
 (184,'Login on the system.','admin',NULL,'2023-01-10 09:23:20','2023-01-10 09:23:20'),
 (185,'Login on the system.','admin',NULL,'2023-01-10 13:34:21','2023-01-10 13:34:21'),
 (186,'Schedule 17(ADW) created.','admin',NULL,'2023-01-10 23:18:56','2023-01-10 23:18:56'),
-(187,'Schedule 18(XZC) created.','admin',NULL,'2023-01-10 23:19:13','2023-01-10 23:19:13');
+(187,'Schedule 18(XZC) created.','admin',NULL,'2023-01-10 23:19:13','2023-01-10 23:19:13'),
+(188,'Login on the system.','admin',NULL,'2023-01-11 12:20:32','2023-01-11 12:20:32'),
+(189,'Device 7(DEVICE 01) updated.','admin','UPDATE','2023-01-11 12:21:49','2023-01-11 12:21:49'),
+(190,'Device 7(DEVICE 01) updated.','admin','UPDATE','2023-01-11 13:13:12','2023-01-11 13:13:12'),
+(191,'Device turned ON. URL is 192.168.1.71.','admin','ON','2023-01-11 13:15:54','2023-01-11 13:15:54'),
+(192,'Device turned OFF. URL is 192.168.1.71.','admin','OFF','2023-01-11 13:15:57','2023-01-11 13:15:57'),
+(193,'Device turned ON. URL is 192.168.1.71.','admin','ON','2023-01-11 13:16:02','2023-01-11 13:16:02'),
+(194,'Device turned OFF. URL is 192.168.1.71.','admin','OFF','2023-01-11 13:16:05','2023-01-11 13:16:05'),
+(195,'Device turned ON. URL is 192.168.1.71.','admin','ON','2023-01-11 13:16:11','2023-01-11 13:16:11'),
+(196,'Device turned OFF. URL is 192.168.1.71.','admin','OFF','2023-01-11 13:16:17','2023-01-11 13:16:17'),
+(197,'Device turned ON. URL is 192.168.1.71.','admin','ON','2023-01-11 13:16:20','2023-01-11 13:16:20'),
+(198,'Device turned OFF. URL is 192.168.1.71.','admin','OFF','2023-01-11 13:16:24','2023-01-11 13:16:24'),
+(199,'Device 7(DEVICE 01) updated.','admin','UPDATE','2023-01-11 13:21:34','2023-01-11 13:21:34'),
+(200,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 13:21:40','2023-01-11 13:21:40'),
+(201,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 13:21:43','2023-01-11 13:21:43'),
+(202,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 13:21:50','2023-01-11 13:21:50'),
+(203,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 13:21:55','2023-01-11 13:21:55'),
+(204,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 13:22:13','2023-01-11 13:22:13'),
+(205,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 13:22:17','2023-01-11 13:22:17'),
+(206,'Device 8(DEVICE 02) updated.','admin','UPDATE','2023-01-11 13:48:05','2023-01-11 13:48:05'),
+(207,'Device 8(DEVICE 02) updated.','admin','UPDATE','2023-01-11 13:48:18','2023-01-11 13:48:18'),
+(208,'Device 8(DEVICE 02) updated.','admin','UPDATE','2023-01-11 13:48:27','2023-01-11 13:48:27'),
+(209,'Device 8(DEVICE 02) updated.','admin','UPDATE','2023-01-11 14:01:36','2023-01-11 14:01:36'),
+(210,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:01:46','2023-01-11 14:01:46'),
+(211,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:01:48','2023-01-11 14:01:48'),
+(212,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:01:49','2023-01-11 14:01:49'),
+(213,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:01:52','2023-01-11 14:01:52'),
+(214,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:01:55','2023-01-11 14:01:55'),
+(215,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:01:56','2023-01-11 14:01:56'),
+(216,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 14:05:22','2023-01-11 14:05:22'),
+(217,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 14:05:26','2023-01-11 14:05:26'),
+(218,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 14:05:29','2023-01-11 14:05:29'),
+(219,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 14:05:34','2023-01-11 14:05:34'),
+(220,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 14:05:40','2023-01-11 14:05:40'),
+(221,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:05:42','2023-01-11 14:05:42'),
+(222,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:05:46','2023-01-11 14:05:46'),
+(223,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:05:49','2023-01-11 14:05:49'),
+(224,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:05:52','2023-01-11 14:05:52'),
+(225,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 14:05:56','2023-01-11 14:05:56'),
+(226,'Device 7(DEVICE 01) updated.','admin','UPDATE','2023-01-11 14:06:43','2023-01-11 14:06:43'),
+(227,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 14:06:51','2023-01-11 14:06:51'),
+(228,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 14:07:01','2023-01-11 14:07:01'),
+(229,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:07:03','2023-01-11 14:07:03'),
+(230,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 14:07:06','2023-01-11 14:07:06'),
+(231,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:07:08','2023-01-11 14:07:08'),
+(232,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:07:13','2023-01-11 14:07:13'),
+(233,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:07:14','2023-01-11 14:07:14'),
+(234,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 14:07:16','2023-01-11 14:07:16'),
+(235,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 14:07:18','2023-01-11 14:07:18'),
+(236,'Device 7(DEVICE 01) updated.','admin','UPDATE','2023-01-11 14:07:50','2023-01-11 14:07:50'),
+(237,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:08:01','2023-01-11 14:08:01'),
+(238,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:08:04','2023-01-11 14:08:04'),
+(239,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 14:08:05','2023-01-11 14:08:05'),
+(240,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:08:06','2023-01-11 14:08:06'),
+(241,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 14:08:08','2023-01-11 14:08:08'),
+(242,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:08:09','2023-01-11 14:08:09'),
+(243,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 14:08:10','2023-01-11 14:08:10'),
+(244,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:08:11','2023-01-11 14:08:11'),
+(245,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 14:08:12','2023-01-11 14:08:12'),
+(246,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:08:14','2023-01-11 14:08:14'),
+(247,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:11:14','2023-01-11 14:11:14'),
+(248,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:11:19','2023-01-11 14:11:19'),
+(249,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:18:33','2023-01-11 14:18:33'),
+(250,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:18:34','2023-01-11 14:18:34'),
+(251,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 14:18:35','2023-01-11 14:18:35'),
+(252,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 14:18:37','2023-01-11 14:18:37'),
+(253,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 14:18:40','2023-01-11 14:18:40'),
+(254,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 14:18:42','2023-01-11 14:18:42'),
+(255,'Device turned ON. URL is 192.168.254.82.','admin','ON','2023-01-11 14:18:43','2023-01-11 14:18:43'),
+(256,'Device turned OFF. URL is 192.168.254.82.','admin','OFF','2023-01-11 14:18:45','2023-01-11 14:18:45'),
+(257,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 14:18:46','2023-01-11 14:18:46'),
+(258,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 14:18:48','2023-01-11 14:18:48'),
+(259,'Device turned ON. URL is 192.168.254.80.','admin','ON','2023-01-11 14:34:03','2023-01-11 14:34:03'),
+(260,'Device turned OFF. URL is 192.168.254.80.','admin','OFF','2023-01-11 14:34:06','2023-01-11 14:34:06'),
+(261,'Logout on the system.','admin',NULL,'2023-01-11 15:00:07','2023-01-11 15:00:07');
 
 /*Table structure for table `users` */
 
