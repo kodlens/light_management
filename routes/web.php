@@ -234,6 +234,35 @@ Route::get('/now-sched', function(){
 
 });
 
+
+Route::get('/test-sched', function(){
+
+    //return date("Y-m-d H:i");
+    $day = date('D');
+    $sched = DB::table('group_schedules as a')
+        ->join('group_schedule_devices as b', 'a.group_schedule_id', 'b.group_schedule_id')
+        ->join('devices as c', 'b.device_id', 'c.device_id')
+        ->where($day, 1)
+        ->get();
+
+        $time = date('H:i') . ':00';
+
+        foreach($sched as $i){
+            if($time === $i->schedule_on){
+                Http::withHeaders([
+                    'Content-Type' => 'text/plain'
+                ])->get('http://'.$i->device_ip . '/' . $i->device_token_on, []);
+                return 'turn on';
+            }
+
+            if($time === $i->schedule_off){
+                Http::withHeaders([
+                    'Content-Type' => 'text/plain'
+                ])->get('http://'.$i->device_ip . '/' . $i->device_token_off, []);
+            }
+        }
+});
+
 Route::get('/test-switch', function(){
     return 'ON';
 });

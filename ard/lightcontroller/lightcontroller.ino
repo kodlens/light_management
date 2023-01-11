@@ -5,16 +5,16 @@
 #include "LittleFS.h"
 #include <Wire.h>
 
-const char* ssid="eshen_2";   //Put your wifi network name here
-const char* password = "11223344";   //Put your wifi password here
+const char* ssid="Thesis";   //Put your wifi network name here
+const char* password = "12341234";   //Put your wifi password here
 
-IPAddress local_ip(192,168,254,130);
+IPAddress local_ip(192,168,254,82);
 IPAddress subnet(255,255,255,0);
 IPAddress gateway(192,168,254,254);
 IPAddress primaryDNS(8,8,8,8); //optional
 IPAddress secondaryDNS(8,8,4,4); //optional
 
-IPAddress canconnect(192,168,254,10);
+//IPAddress canconnect(192,168,254,10);
 
 WiFiServer server(80);
 
@@ -31,7 +31,7 @@ int printMe = 0;
 
 
 void setup() {
-
+  Serial.print("Node MCU Turning On.... ");
   pinMode(RELAY1, OUTPUT); //declare GPI00
   digitalWrite(RELAY1, LOW);
   Serial.begin(9600);      //initial Serial communication for serial monitor  Note:115200 depends on your board  
@@ -55,7 +55,7 @@ void setup() {
     //while loop runs repeatedly unless condition is false
     //it'll keep trying unless wifi is connected      
     delay(500);      
-    Serial.print(".");          
+    Serial.print("#.");          
   }
   //Serial.println();
   Serial.println("Wifi Connected Success!");  
@@ -109,14 +109,14 @@ void loop() {
   // Match the request
   int value = LOW;
   
-  if (request.indexOf("/fb544adc0adbe717a06e6e1391afcd03") != -1)  
+  if (request.indexOf("/284d6b23c62639f7d091957c4bcd383e") != -1)  
   {
     //turn off relay
     digitalWrite(RELAY1,HIGH);
     value = HIGH;
   }
   
-  if (request.indexOf("/d1894f44e4c99eb258b3a3683c52f40e") != -1)  
+  if (request.indexOf("/cbe75359e299cacb7f0fc1bf1b471483") != -1)  
   {
     //turn on relay
     digitalWrite(RELAY1,LOW);

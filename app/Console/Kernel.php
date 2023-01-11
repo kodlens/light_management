@@ -76,11 +76,14 @@ class Kernel extends ConsoleKernel
 
 
             //group schedule
-            $sched = DB::table('group_scheduls as a')
-                ->join('gruop_schedule_devices as b', 'a.group_schedule_id', 'b.group_schedule_id')
+            $sched = DB::table('group_schedules as a')
+                ->join('group_schedule_devices as b', 'a.group_schedule_id', 'b.group_schedule_id')
                 ->join('devices as c', 'b.device_id', 'c.device_id')
                 ->where('date_time', date("Y-m-d H:i"))
                 ->get();
+
+            
+
 
             foreach($sched as $i){
                 if($i->system_action == 'ON'){
@@ -97,8 +100,8 @@ class Kernel extends ConsoleKernel
 
 
 
-            $sched = DB::table('group_scheduls as a')
-                ->join('gruop_schedule_devices as b', 'a.group_schedule_id', 'b.group_schedule_id')
+            $sched = DB::table('group_schedules as a')
+                ->join('group_schedule_devices as b', 'a.group_schedule_id', 'b.group_schedule_id')
                 ->join('devices as c', 'b.device_id', 'c.device_id')
                 ->where($day, 1)
                 ->get();
