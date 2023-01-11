@@ -100,11 +100,11 @@ void loop() {
   client.flush();
 
 
-  if(client.remoteIP() != canconnect){
-    Serial.println("Connection denied.");
-    client.print("Connection denied");
-    return;
-  }
+  // if(client.remoteIP() != canconnect){
+  //   Serial.println("Connection denied.");
+  //   client.print("Connection denied");
+  //   return;
+  // }
 
   // Match the request
   int value = LOW;
