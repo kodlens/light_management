@@ -113,7 +113,7 @@ class Kernel extends ConsoleKernel
                     Http::withHeaders([
                         'Content-Type' => 'text/plain'
                     ])->get('http://'.$i->device_ip . '/' . $i->device_token_on, []);
-                    return 'turn on';
+                    //return 'turn on';
                 }
 
                 if($time === $i->schedule_off){
