@@ -63,11 +63,10 @@ void setup() {
   Serial.println(WiFi.localIP());         //Gets the IP address of your Board  
   delay(500);
 
-  if(!LittleFS.begin()){
-    Serial.println("An Error has occurred while mounting LittleFS");
-    return;
-  }
-  Serial.println("LittleFS begin...");
+  Serial.println();
+  Serial.print("ESP Board MAC Address:  ");
+  Serial.println(WiFi.macAddress());
+
 }
 
 void loop() {
@@ -108,7 +107,7 @@ void loop() {
 
   // Match the request
   int value = LOW;
-  
+
   if (request.indexOf("/284d6b23c62639f7d091957c4bcd383e") != -1)  
   {
     //turn off relay
@@ -123,51 +122,25 @@ void loop() {
     value = LOW;
   }
 
-//  if (request.indexOf("/WRITE") != -1)  
-//  {
-//    //turn on relay
-//    Serial.println("WRITE Data");
-//    //writeData("fb544adc0adbe717a06e6e1391afcd03");
-//    writeData("abc");
-//  }
-//
-//  if (request.indexOf("/DELETE") != -1)  
-//  {
-//    //turn on relay
-//    Serial.println("DELETE Data");
-//    deleteData();
-//  }
-//
-//  if (request.indexOf("/READ") != -1)  
-//  {
-//    
-//    //turn on relay
-//    Serial.println("Read Data");
-//    //readData();
-//  }
-
-
-
   // Return the response
   client.println("HTTP/1.1 200 OK");
   client.println("Content-Type: text/html");
   client.println("Access-Control-Allow-Origin: *");
   
   client.println(""); //  this is a must
+
+  if (request.indexOf("/mac") != -1)  
+  {
+    //turn off relay
+    client.print("Mac: ");
+    client.print(WiFi.macAddress());
+  }
+  
 //  client.println("<!DOCTYPE HTML>");
 //  client.println("<html>");
 //  client.println("<head><title>ESP8266 RELAY Control</title></head>");
   //  client.print("Relay is now: ");
-  
-  //client.print(value);
-//  if(value == HIGH) 
-//  {
-//    client.print("ON");
-//  } 
-//  else 
-//  {
-//    client.print("OFF");
-//  }
+
 
   if(digitalRead(RELAY1) == HIGH) 
   {
@@ -178,21 +151,6 @@ void loop() {
     client.print("OFF");
   }
 
-//  File file = LittleFS.open("/tokenfile.txt", "r");
-//  //Check if the file exists
-//  if(!file){
-//    Serial.println("No Saved Data!"); 
-//    return;
-//  }
-//  
-//  while(file.available()){
-//    Serial.println(file.read());
-//    client.println(file.read());
-//  }
-//  
-//  file.close();
-
-  
 //  client.println("<br><br>");
 //  client.println("Turn <a href=\"/RELAY=OFF\">OFF</a> RELAY<br>");
 //  client.println("Turn <a href=\"/RELAY=ON\">ON</a> RELAY<br>");
@@ -203,40 +161,4 @@ void loop() {
   Serial.println("");
 
   
-}
-
-
-
-
-void readData(){
-  //Open the file
-  File file = LittleFS.open("/tokenfile.txt", "r");
-  //Check if the file exists
-  if(!file){
-    Serial.println("No Saved Data!"); 
-    return;
-  }
-  
-  while(file.available()){
-    Serial.println(file.read());
-  }
-  
-  file.close();
-}
-
-void writeData(String data){
-  //Open the file 
-  File file = LittleFS.open("/tokenfile.txt", "w");
-  //Write to the file
-  file.print(data);
-  file.close();
-  delay(1); 
-  Serial.println("Write successful");
-  file.close();
-}
-
-void deleteData(){
-   //Remove the file
-   LittleFS.remove("/tokenfile.txt"); 
-   Serial.println("Data Deleted"); 
 }
